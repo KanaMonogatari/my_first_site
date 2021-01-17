@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title%} {%endblock%}</title>
+<link href = '{% static "css/base.css" %}' rel='stylesheet'>
+</head>
+<body>
+    <div id = 'header'>  
+        <a href = '/feed/'><h2>My social</h2></a>
+    {% if request.user.is_authenticated %}
+    <h3><a class = 'Button' href='/feed/logout'>Logout</a></h3>
+    <h3><a class = 'Button' href = '/feed/profile/{{request.user}}'>Profile</a></h3>
+    {% endif %}
+    </div>
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">
+    {{ message|safe }}
+    <a href="#" class="close">x</a>
+    </li>
+    {% endfor %}
+    </ul>
+   {% endif %}
+    <div id = 'content'> {% block content %}{% endblock %}</div>
+    
+
+</body>
+</html>

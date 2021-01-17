@@ -1,0 +1,42 @@
+{% extends "feed/base.html" %}
+{% load static %}
+{%block title %}{{nickname}}{%endblock%}
+{% block content %}
+<h2 class = 'profile-nickname'>{{nickname}}</h2>
+{% if avatar %}
+<img class = 'avatar' src='/feed/media/{{avatar}}'>
+{% else %}
+<img class = 'avatar' src='/feed/media/images/users/IMG_20200602_120716_501.jpg'>
+{% endif %}
+{% if user_profile %}
+<div class='profile-edit'><a href = '/feed/profile/edit/{{nickname}}'>Edit profile</a></div>
+{% endif %}
+<div class = 'info'>
+    user_info
+</div>
+<div class ='center'>
+    <div class = 'profile'>
+{% for post in posts %}
+<div class = 'post'>
+<p>{{post.body}}</p>
+    </div>
+<div class = 'post-picture'>
+{% if post.image %}
+<a href='/feed/media/{{post.image}}'><img src="/feed/media/{{post.image}}"></a>
+
+{% endif %}
+
+</div>
+
+{% if post.author == this_user %}
+<a href = '/feed/posts/delete/{{post.author}}/{{post.publish}}/' class = 'delete'>Delete this post</a>
+{%endif %}
+<hr class = 'posts-hr'/>
+{% endfor %}
+
+</div>
+
+<p class = 'empty'></p>
+{% include "feed/pagination.html" with page=posts %}
+</div>
+{%endblock%}

@@ -1,0 +1,50 @@
+{% extends "feed/base.html" %}
+{% load static %}
+{% block title %}Feed{% endblock%}
+{% block content %}
+<div class ='center'>
+    <form action="." method="post" enctype="multipart/form-data">
+        {{ post_form.as_p }}
+        {{ profile_form.as_p}}
+        {% csrf_token %}
+        <p><input class = 'no-border' type="submit" value="Post"></p>
+</form>
+{% for post in posts %}
+{% with User=post.author %}
+
+{% for avatar in avatars %}
+
+{% if avatar.user == User%}
+<img class = 'feed-avatar'src='media/{{avatar.avatar}}'>
+{% endif %}
+
+
+{{User.avatar.avatar}}
+
+{% endfor %}
+
+{% endwith %}
+
+<p class = 'post-author'><a href='/feed/profile/{{post.author}}'>{{post.author}}</a></p>
+
+<div class = 'post'>
+<p>{{post.body}}</p>
+</div>
+
+{% if post.image %}
+<div class = 'post-picture'>
+<a href='media/{{post.image}}'><img src="media/{{post.image}}"></a>
+</div>
+{% endif %}
+{% if post.author == this_user %}
+<a href = '/feed/posts/delete/{{post.author}}/{{post.publish}}/' class = 'delete'>Delete this post</a>
+{%endif %}
+<hr class = 'posts-hr'/>
+{% endfor %}
+<div class='paginator'>
+{% include "feed/pagination.html" with page=posts %}
+</div>
+</div>
+<p class = 'empty'></p>
+
+{%endblock%}    

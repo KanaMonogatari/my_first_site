@@ -1,0 +1,18 @@
+{% extends "feed/base.html" %}
+{% load static %}
+{%block title %}Register{% endblock %}
+{% block content %}
+<h1>Register</h1>
+<div class = 'login-form'>
+    <form action="." method="post" enctype="multipart/form-data">
+        {{ user_form.as_p }}
+        {{ profile_form.as_p}}
+        {% csrf_token %}
+        <p><input class = 'no-border' type="submit" value="Create my account"></p>
+        </form>
+<form action='/feed/login/' method='get'>
+    <p class = 'inline-button' ><input class = 'no-border'   type='submit' value = 'Login'></p>
+</form>
+</div>
+
+{% endblock %}
