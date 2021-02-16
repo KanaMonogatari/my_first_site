@@ -1,2 +1,2 @@
 # my_first_site
-# not my css
+# modified css from Antonio Melé's book
