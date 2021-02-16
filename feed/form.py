@@ -10,6 +10,7 @@ class LoginForm(forms.Form):
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label='Password',widget=forms.PasswordInput)
+    #перемену password2 repeat  
     password2= forms.CharField(label='Repeat password',widget=forms.PasswordInput)
 
     class Meta:

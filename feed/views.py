@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from time import strptime
 
 # Create your views here.
-
+#почему бы не использовать декоратор  @require_http_methods(["GET", "POST"])
 @login_required()
 def feed(request):
     if request.method == 'POST':
@@ -26,6 +26,7 @@ def feed(request):
 
     post_form = PostModel()
     posts = Post.objects.all()
+    # перемену в pagination
     paginator = Paginator(posts,5)
     page = request.GET.get('page')
 
@@ -34,7 +35,7 @@ def feed(request):
         
     except EmptyPage:
         post = paginator.page(paginator.num_pages)
-
+    #добавь обратку ошибки interError если все пойдет не так
     except PageNotAnInteger:
         post = paginator.page(1)
     avatars = UserProfile.objects.all()
@@ -46,12 +47,13 @@ def user_login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request,username = cd['username'],password = cd['password'])
+            user = authenticate(request, username=cd['username'], password = cd['password'])
         if user is not None:
             if user.is_active:
                 login(request,user)
                 return HttpResponseRedirect('/feed/')
-            else:
+            else:  
+                # используй статусы Response тут походит 500 
                 return HttpResponse('User is not active')
 
         else:
@@ -86,6 +88,7 @@ def user_logout(request):
 
 @login_required
 def profile(request,user):
+    # перепиши этот костыль ;) 
     user_info = User.objects.filter(username=request.user)
     user_info2 = User.objects.filter(username=user)
     user_profile = str(user_info) == str(user_info2)
@@ -174,9 +177,10 @@ def postDelete(request,author,publish,result = None):
             
             post_years,post_time = post_date.split(' ') 
             post_year,post_month,post_day = post_years.split('-')
-            post_time,_ = post_time.rsplit(':',1)
+            post_time,_ = post_time.rsplit(':',1) # >?  
             _,post_month = post_month.split('0',1)
             _,post_time= post_time.split('0',1)
+            # перепеши
             if str(post_year) == str(year) and str(post_month)==str(month) and str(post_day==day) and str(post_time)==str(time):
                 post.delete()
             return HttpResponseRedirect('/feed/')
